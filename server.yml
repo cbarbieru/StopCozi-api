@@ -1,0 +1,6 @@
+config: inflector.yaml
+database:
+  driverClass: com.mysql.jdbc.Driver
+  user: root
+  password: boxmarker
+  url: jdbc:mysql://localhost:3306/stopcozi?useUnicode=true&characterEncoding=UTF-8&characterSetResults=utf8&connectionCollation=utf8_romanian_ci

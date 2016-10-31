@@ -1,0 +1,213 @@
+swagger: "2.0"
+info:
+  description: "Acesta este Interfata Publica pentru Serviciul de Programari Online"
+  version: 0.1
+  title: Stop Cozi API
+  termsOfService: "http://stopcozi.ithub.gov.ro/terms/"
+  contact:
+    email: "api@gov.ro"
+  license:
+    name: Apache 2.0
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+basePath: /v2
+tags:
+  - name: agentii
+    description: Agentii afiliate Stop Cozi
+    externalDocs:
+      description: Aflati mai multe
+      url: "stopcozi.ithub.gov.ro"
+  - name: servicii
+    description: Servicii publice specifice fiecarei agentii
+  - name: disponibilitati
+    description: Intervalele orare disponibile pentru fiecare serviciu
+  - name: programari
+    description: Efectuarea de programari
+schemes:
+  - http
+paths:
+  "/agencies/{countyCode}":
+    get:
+      tags:
+        - agentii
+      summary: Listeaza agentiile afiliate grupate dupa codul judetului
+      x-swagger-router-controller: CitizenController
+      description: ""
+      operationId: listAgencies
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: countyCode
+          in: path
+          description: Codul judetului
+          type: string
+          required: true
+      responses:
+        "200":
+          description: operatiune cu succes
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Agency"
+        "405":
+          description: Cod judet invalid
+      security:
+        - api_key: []
+        - citizen_auth:
+            - "read:agecies"
+  "/offices/{agencyId}":
+    get:
+      tags:
+        - servicii
+      summary: Listeaza serviciile disponibile pentru programari online
+      x-swagger-router-controller: CitizenController
+      description: ""
+      operationId: listOffices
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: agencyId
+          in: path
+          description: Codul agentiei
+          required: true
+          type: string
+      responses:
+        "200":
+          description: operatiune cu succes
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Office"
+        "405":
+          description: Cod agentie invalid
+      security:
+        - api_key: []
+        - citizen_auth:
+            - "read:offices"
+  "/freeslots/{officeId}":
+    get:
+      tags:
+        - disponibilitati
+      summary: Listeaza disponibilitatile pentru un serviciu timp de o luna incepand de la primul interval disponibil
+      x-swagger-router-controller: CitizenController
+      description: ""
+      operationId: getFreeSlots
+      produces:
+        - application/json
+      parameters:
+        - name: officeId
+          in: path
+          description: ""
+          required: true
+          type: string
+      responses:
+        "200":
+          description: operatiune cu succes
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/FreeSlot"
+        "400":
+          description: Cod serviciu invalid
+      security:
+        - citizen_auth:
+            - "read:freeslots"
+  "/appointment/{officeId}":
+    post:
+      tags:
+        - programari
+      summary: Realizeaza o programare
+      x-swagger-router-controller: CitizenController
+      description: ""
+      operationId: createAppointment
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: officeId
+          in: path
+          description: Identificatorul biroului unde se doreste efectuareaprogramarii
+          required: true
+          type: string
+        - name: appointment
+          in: body
+          description: Detaliile programarii
+          required: true
+          schema:
+            $ref: "#/definitions/Appointment"
+
+      responses:
+        "405":
+          description: Cerere invalida
+      security:
+        - citizen_auth:
+            - "write:appointments"
+securityDefinitions:
+  citizen_auth:
+    type: oauth2
+    authorizationUrl: "http://sso.ithub.gov.ro/oauth/dialog"
+    flow: implicit
+    scopes:
+      "read:agencies": citeste agentii
+      "read:offices": citeste servicii
+      "read:freeslots": citeste disponibilitati
+      "write:appointments": efectuaza programare
+  api_key:
+    type: apiKey
+    name: api_key
+    in: header
+definitions:
+  Agency:
+    type: object
+    required:
+      - id
+      - name
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      countyCode:
+        type: string
+        description: Cod judet
+    xml:
+      name: Agency
+  Office:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+    xml:
+      name: Office
+  FreeSlot:
+    type: object
+    required:
+      - start
+      - end
+    properties:
+      start:
+        type: number
+        format: 'date-time'
+      end:
+        type: number
+        format: 'date-time'
+    xml:
+      name: FreeSlot
+  Appointment:
+    type: object
+    properties:
+      start:
+        type: number
+        format: 'date-time'
+      name:
+        type: string
+      phone:
+        type: string
