@@ -1,4 +1,3 @@
-config: inflector.yaml
 database:
   driverClass: com.mysql.jdbc.Driver
   user: root

@@ -19,13 +19,16 @@
             </goals>
             <configuration>
               <inputSpec>${basedir}/src/main/swagger/swagger.yaml</inputSpec>
-              <language>inflector</language>
+              <language>jaxrs-spec</language>
+              <templateDirectory>${basedir}/src/main/resources/swagger-codegen-custom-templates</templateDirectory>
               <modelPackage>ro.gov.ithub.stopcozi.model.api</modelPackage>
+              <apiPackage>ro.gov.ithub.stopcozi.controller.api</apiPackage>
               <environmentVariables>
                 <models />
+                <apis />
               </environmentVariables>
               <configOptions>
-                <dateLibrary>java8</dateLibrary>
+                <sourceFolder>src/gen/java</sourceFolder>
               </configOptions>
             </configuration>
           </execution>
@@ -81,9 +84,18 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.dropwizard</groupId>
+        <artifactId>dropwizard-bom</artifactId>
+        <version>1.0.2</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <properties>
-    <dropwizard-version>1.0.2</dropwizard-version>
-    <inflector-version>1.0.2</inflector-version>
     <jackson.version>2.7.6</jackson.version>
   </properties>
 </project>

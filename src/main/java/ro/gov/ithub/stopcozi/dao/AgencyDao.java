@@ -6,8 +6,10 @@ import org.hibernate.criterion.Restrictions;
 import ro.gov.ithub.stopcozi.model.repo.Agency;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
+@Singleton
 public class AgencyDao extends AbstractDAO<Agency> {
     @Inject
     public AgencyDao(SessionFactory sessionFactory) {

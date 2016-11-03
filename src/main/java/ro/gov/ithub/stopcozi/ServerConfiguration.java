@@ -28,8 +28,6 @@ import javax.validation.constraints.NotNull;
 @Getter @Setter
 public class ServerConfiguration extends Configuration {
 
-    private String config;
-
     @Valid
     @NotNull
     @JsonProperty
