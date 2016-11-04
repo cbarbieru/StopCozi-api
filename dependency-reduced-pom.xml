@@ -22,7 +22,7 @@
               <language>jaxrs-spec</language>
               <templateDirectory>${basedir}/src/main/resources/swagger-codegen-custom-templates</templateDirectory>
               <modelPackage>ro.gov.ithub.stopcozi.model.api</modelPackage>
-              <apiPackage>ro.gov.ithub.stopcozi.controller.api</apiPackage>
+              <apiPackage>ro.gov.ithub.stopcozi.resource.api</apiPackage>
               <environmentVariables>
                 <models />
                 <apis />

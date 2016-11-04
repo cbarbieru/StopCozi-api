@@ -95,24 +95,12 @@
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <version>4.0</version>
-            <!--
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.inject</groupId>
-                    <artifactId>javax.inject</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>aopalliance</groupId>
-                    <artifactId>aopalliance</artifactId>
-                </exclusion>
-            </exclusions>
-            -->
         </dependency>
 
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.36</version>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>LATEST</version>
         </dependency>
 
         <dependency>
@@ -143,7 +131,7 @@
                             <language>jaxrs-spec</language>
                             <templateDirectory>${basedir}/src/main/resources/swagger-codegen-custom-templates</templateDirectory>
                             <modelPackage>ro.gov.ithub.stopcozi.model.api</modelPackage>
-                            <apiPackage>ro.gov.ithub.stopcozi.controller.api</apiPackage>
+                            <apiPackage>ro.gov.ithub.stopcozi.resource.api</apiPackage>
                             <environmentVariables>
                                 <models></models>
                                 <apis></apis>

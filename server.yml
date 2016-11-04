@@ -1,5 +1,5 @@
 database:
-  driverClass: com.mysql.jdbc.Driver
-  user: root
-  password: boxmarker
-  url: jdbc:mysql://localhost:3306/stopcozi?useUnicode=true&characterEncoding=UTF-8&characterSetResults=utf8&connectionCollation=utf8_romanian_ci
+  driverClass: org.h2.Driver
+  user: sa
+  password: sa
+  url: jdbc:h2:mem:test

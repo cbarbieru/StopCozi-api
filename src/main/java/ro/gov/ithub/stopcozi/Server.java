@@ -17,8 +17,8 @@
 package ro.gov.ithub.stopcozi;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 import com.google.inject.Stage;
-import com.google.inject.util.Providers;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
@@ -43,7 +43,8 @@ public class Server extends Application<ServerConfiguration> {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(Server.class);
 
     private final HibernateBundle<ServerConfiguration> hibernateBundle = new HibernateBundle<ServerConfiguration>(
-            Agency.class, Appointment.class, Desk.class, Office.class) {
+        Agency.class, Appointment.class, Desk.class, Office.class
+    ) {
         @Override
         public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
             return configuration.getDatabase();
@@ -65,13 +66,11 @@ public class Server extends Application<ServerConfiguration> {
 
         bootstrap.addBundle(GuiceBundle.<ServerConfiguration>newBuilder()
             .addModule(new AbstractModule(){
-
-                @Override
-                protected void configure() {
-                    bind(SessionFactory.class).toProvider(Providers.of(hibernateBundle.getSessionFactory()));
-                }
+                @Override protected void configure() {}
+                @Provides SessionFactory sessionFactoryProvider() { return hibernateBundle.getSessionFactory();}
             })
             .setConfigClass(ServerConfiguration.class)
+            .enableAutoConfig(getClass().getPackage().getName())
             .build(Stage.DEVELOPMENT)
         );
 
