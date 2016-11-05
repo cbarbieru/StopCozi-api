@@ -3,3 +3,7 @@ database:
   user: sa
   password: sa
   url: jdbc:h2:mem:test
+server:
+  applicationConnectors:
+    - type: http
+      port: ${PORT:-8080}
