@@ -9,7 +9,6 @@ info:
   license:
     name: Apache 2.0
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-basePath: /v2
 tags:
   - name: agentii
     description: Agentii afiliate Stop Cozi
@@ -30,7 +29,6 @@ paths:
       tags:
         - agentii
       summary: Listeaza agentiile afiliate grupate dupa codul judetului
-      x-swagger-router-controller: CitizenController
       description: ""
       operationId: listAgencies
       consumes:
@@ -61,7 +59,6 @@ paths:
       tags:
         - servicii
       summary: Listeaza serviciile disponibile pentru programari online
-      x-swagger-router-controller: CitizenController
       description: ""
       operationId: listOffices
       consumes:
@@ -92,7 +89,6 @@ paths:
       tags:
         - disponibilitati
       summary: Listeaza disponibilitatile pentru un serviciu timp de o luna incepand de la primul interval disponibil
-      x-swagger-router-controller: CitizenController
       description: ""
       operationId: getFreeSlots
       produces:
@@ -120,7 +116,6 @@ paths:
       tags:
         - programari
       summary: Realizeaza o programare
-      x-swagger-router-controller: CitizenController
       description: ""
       operationId: createAppointment
       consumes:
