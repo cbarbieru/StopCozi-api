@@ -31,7 +31,6 @@ import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.hibernate.SessionFactory;
 import org.slf4j.LoggerFactory;
 import ro.gov.ithub.stopcozi.model.repo.Agency;
-import ro.gov.ithub.stopcozi.model.repo.Appointment;
 import ro.gov.ithub.stopcozi.model.repo.Desk;
 import ro.gov.ithub.stopcozi.model.repo.Office;
 
@@ -43,7 +42,7 @@ public class Server extends Application<ServerConfiguration> {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(Server.class);
 
     private final HibernateBundle<ServerConfiguration> hibernateBundle = new HibernateBundle<ServerConfiguration>(
-        Agency.class, Appointment.class, Desk.class, Office.class
+        Agency.class, Desk.class, Office.class
     ) {
         @Override
         public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {

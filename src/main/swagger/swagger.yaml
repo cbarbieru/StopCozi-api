@@ -1,66 +1,52 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  description: "Acesta este Interfata Publica pentru Serviciul de Programari Online"
-  version: 0.1
+  version: '0.1'
+  description: 'Acesta este interfata de comunicare cu operatorii de sisteme de furnizat bonuri de ordine'
   title: Stop Cozi API
-  termsOfService: "http://stopcozi.ithub.gov.ro/terms/"
+  termsOfService: 'http://stopcozi.ithub.gov.ro/terms/'
   contact:
-    email: "api@gov.ro"
+    email: 'api@gov.ro'
   license:
     name: Apache 2.0
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 tags:
-  - name: agentii
-    description: Agentii afiliate Stop Cozi
-    externalDocs:
-      description: Aflati mai multe
-      url: "stopcozi.ithub.gov.ro"
-  - name: servicii
-    description: Servicii publice specifice fiecarei agentii
-  - name: disponibilitati
-    description: Intervalele orare disponibile pentru fiecare serviciu
-  - name: programari
-    description: Efectuarea de programari
+  - name: stare
+    description: Operatiune de stabilire a starii unei locatii
+  - name: activitate
+    description: Operatiuni de comunicare a operatiunilor legate de bonuri
 schemes:
   - http
 paths:
-  "/agencies/{countyCode}":
-    get:
+  '/agency/{agencyId}':
+    put:
       tags:
-        - agentii
-      summary: Listeaza agentiile afiliate grupate dupa codul judetului
-      description: ""
-      operationId: listAgencies
+        - stare
+      summary: Actualizeaza agentia.
+      operationId: updateAgency
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
-        - name: countyCode
-          in: path
-          description: Codul judetului
-          type: string
+        - name: agency
+          in: body
+          description: Starea agentiei
           required: true
-      responses:
-        "200":
-          description: operatiune cu succes
           schema:
-            type: array
-            items:
-              $ref: "#/definitions/Agency"
-        "405":
-          description: Cod judet invalid
-      security:
-        - api_key: []
-        - citizen_auth:
-            - "read:agecies"
-  "/offices/{agencyId}":
-    get:
+            $ref: '#/definitions/Agency'
+      responses:
+        '200':
+          description: Agentia a fost actualizata
+        '404':
+          description: Agentie inexistenta
+        '409':
+          description: Informatii lipsa
+  '/ticket/{agencyId}/{serviceId}/{ticketNo}':
+    post:
       tags:
-        - servicii
-      summary: Listeaza serviciile disponibile pentru programari online
-      description: ""
-      operationId: listOffices
+        - activitate
+      summary: Creaza bon
+      operationId: createTicket
       consumes:
         - application/json
       produces:
@@ -68,141 +54,177 @@ paths:
       parameters:
         - name: agencyId
           in: path
-          description: Codul agentiei
-          required: true
           type: string
-      responses:
-        "200":
-          description: operatiune cu succes
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/Office"
-        "405":
-          description: Cod agentie invalid
-      security:
-        - api_key: []
-        - citizen_auth:
-            - "read:offices"
-  "/freeslots/{officeId}":
-    get:
-      tags:
-        - disponibilitati
-      summary: Listeaza disponibilitatile pentru un serviciu timp de o luna incepand de la primul interval disponibil
-      description: ""
-      operationId: getFreeSlots
-      produces:
-        - application/json
-      parameters:
-        - name: officeId
+        - name: serviceId
           in: path
-          description: ""
-          required: true
           type: string
-      responses:
-        "200":
-          description: operatiune cu succes
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/FreeSlot"
-        "400":
-          description: Cod serviciu invalid
-      security:
-        - citizen_auth:
-            - "read:freeslots"
-  "/appointment/{officeId}":
-    post:
-      tags:
-        - programari
-      summary: Realizeaza o programare
-      description: ""
-      operationId: createAppointment
-      consumes:
-        - application/x-www-form-urlencoded
-      produces:
-        - application/json
-      parameters:
-        - name: officeId
+        - name: ticketNo
           in: path
-          description: Identificatorul biroului unde se doreste efectuareaprogramarii
-          required: true
           type: string
-        - name: appointment
+        - name: ticket
           in: body
-          description: Detaliile programarii
-          required: true
           schema:
-            $ref: "#/definitions/Appointment"
-
+            $ref: '#/definitions/Ticket'
+          description: Continutul bonului
       responses:
-        "405":
-          description: Cerere invalida
-      security:
-        - citizen_auth:
-            - "write:appointments"
-securityDefinitions:
-  citizen_auth:
-    type: oauth2
-    authorizationUrl: "http://sso.ithub.gov.ro/oauth/dialog"
-    flow: implicit
-    scopes:
-      "read:agencies": citeste agentii
-      "read:offices": citeste servicii
-      "read:freeslots": citeste disponibilitati
-      "write:appointments": efectuaza programare
-  api_key:
-    type: apiKey
-    name: api_key
-    in: header
+        '200':
+          description: Bonul a fost creat
+    put:
+      tags:
+        - activitate
+      summary: Actualizeaza (partial) bonul
+      operationId: updateTicket
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: agencyId
+          in: path
+          type: string
+        - name: serviceId
+          in: path
+          type: string
+        - name: ticketNo
+          in: path
+          type: string
+        - name: ticket
+          in: body
+          schema:
+            $ref: '#/definitions/Ticket'
+          description: Continutul bonului
+      responses:
+        '200':
+          description: Bonul a fost actualizat
 definitions:
   Agency:
     type: object
     required:
-      - id
-      - name
+      - agencyId
+      - services
+      - desks
     properties:
-      id:
-        type: integer
-        format: int64
-      name:
+      agencyId:
         type: string
-      countyCode:
+        description: Id-ul agentiei (ca locatie fizica)
+      agencyName:
         type: string
-        description: Cod judet
-    xml:
-      name: Agency
-  Office:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int64
-      name:
+        description: numele scurt al agentiei (SPCRPCIV)
+      location:
         type: string
-    xml:
-      name: Office
-  FreeSlot:
+        description: Locatia agentiei
+      description:
+        type: string
+        description: Numele complet al agentiei
+      categories:
+        type: array
+        items:
+          $ref: '#/definitions/Category'
+      services:
+        type: array
+        items:
+          $ref: '#/definitions/Service'
+      desks:
+        type: array
+        items:
+          $ref: '#/definitions/Desk'
+  Category:
     type: object
     required:
-      - start
-      - end
+      - categoryId
     properties:
-      start:
+      categoryId:
+        type: string
+      categoryName:
+        type: string
+  Service:
+    type: object
+    required:
+      - serviceId
+      - workingHours
+      - ticketsInProgress
+      - lastIssuedTicket
+    properties:
+      serviceId:
+        type: string
+        description: Id-ul serviciului
+      serviceName:
+        type: string
+        description: Numele serviciului
+      categoryIds:
+        type: array
+        items:
+          type: string
+        description: Categorii asociate serviciului
+      workingHours:
+        type: array
+        items:
+          $ref: '#/definitions/ServiceSchedule'
+        description: Programul serviciului
+      ticketsInProgress:
+        type: array
+        items:
+          type: string
+        description: Numerele bonurilor aflate in lucru
+      lastIssuedTicket:
+        type: string
+        description: Ultimul bon emis
+      ticketLimit:
+        type: integer
+        format: int32
+  Desk:
+    type: object
+    required:
+      - deskId
+    properties:
+      deskId:
+        type: string
+      deskName:
+        type: string
+  Ticket:
+    type: object
+    required:
+      - ticketNo
+      - issueDate
+      - status
+      - serviceId
+    properties:
+      ticketNo:
+        type: integer
+        format: int32
+      issueDate:
         type: number
+        description: Data emiterii
         format: 'date-time'
-      end:
-        type: number
-        format: 'date-time'
-    xml:
-      name: FreeSlot
-  Appointment:
+      status:
+        $ref: '#/definitions/TicketStatus'
+      serviceId:
+        type: string
+        description: Serviciul de referinta
+      deskId:
+        type: string
+        description: Ghiseul catre care a fost directionat bonul
+  TicketStatus:
+    type: string
+    enum:
+      - issued
+      - in_progress
+      - suspended
+      - solved
+    description: Stari posibile pentru un bon
+  ServiceSchedule:
     type: object
     properties:
       start:
-        type: number
+        type: string
         format: 'date-time'
-      name:
+        description: De la
+      end:
         type: string
-      phone:
-        type: string
+        format: 'date-time'
+        description: Pana la
+      desks:
+        type: array
+        items:
+          type: string
+        description: Ghiseele arondate
