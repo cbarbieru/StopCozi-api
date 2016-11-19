@@ -1,9 +1,12 @@
 database:
   driverClass: org.h2.Driver
-  user: sa
-  password: sa
-  url: jdbc:h2:mem:test
+  user: ${MYSQL_USER:-stopcozi}
+  password: ${MYSQL_PASSWORD:-stopcozi}
+  url: jdbc:h2:mem:${MYSQL_DATABASE:-stopcozi}
 server:
   applicationConnectors:
     - type: http
-      port: ${PORT:-8080}
+      port: ${API_PORT:-8080}
+  adminConnectors:
+    - type: http
+      port: ${API_ADMIN_PORT:-8081}

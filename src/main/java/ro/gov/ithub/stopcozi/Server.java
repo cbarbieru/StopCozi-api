@@ -21,6 +21,8 @@ import com.google.inject.Provides;
 import com.google.inject.Stage;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 import io.dropwizard.Application;
+import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
+import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.java8.Java8Bundle;
@@ -74,6 +76,13 @@ public class Server extends Application<ServerConfiguration> {
         );
 
         bootstrap.addBundle(new Java8Bundle());
+
+        // Enable variable substitution with environment variables
+        bootstrap.setConfigurationSourceProvider(
+            new SubstitutingSourceProvider(bootstrap.getConfigurationSourceProvider(),
+                new EnvironmentVariableSubstitutor(false)
+            )
+        );
     }
 
     @Override
