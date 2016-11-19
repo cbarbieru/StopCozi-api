@@ -1,21 +1,24 @@
-Build with
+# StopCozi API
+
+## Instalare
+
+Rulați următoarele comenzi:
 
 ```
-mvn clean install 
+sudo mkdir -p /opt/mysql/data
+cp .env.sample .env
 ```
 
-Run with 
+Editați fișierul `.env` și completați-l cu detaliile necesare.
+
+## Execuție și acces
 
 ```
-java -jar ./target/StopCozi-api-1.0.0-SNAPSHOT.jar server server.yml
+docker-compose up -d
 ```
 
-
-You can get to the swagger file at:
-
-```
-http://localhost:8080/swagger.json
-```
+Acum puteți accesa:
+* API-ul swagger [aici](http://localhost:8080/swagger.json).
+* Interfața admin [aici](http://localhost:8081).
 
 Have fun!
-
