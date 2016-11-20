@@ -28,7 +28,7 @@ docker-machine start
 eval $(docker-machine env default)
 ```
 
-Altfel, rulează `Docker Quickstart Terminal` și rulează:
+Altfel, rulează `Docker Quickstart Terminal` și execută:
 
 ```
 docker-compose up -d
