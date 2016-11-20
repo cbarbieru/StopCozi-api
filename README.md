@@ -11,10 +11,35 @@ cp .env.sample .env
 
 Editați fișierul `.env` și completați-l cu detaliile necesare.
 
-## Execuție și acces
+## Execuție
+
+### Linux
 
 ```
 docker-compose up -d
+```
+
+### Windows
+
+Dacă folosești Babun și ConEmu, rulează mai întâi:
+
+```
+docker-machine start
+eval $(docker-machine env default)
+```
+
+Altfel, rulează `Docker Quickstart Terminal` și rulează:
+
+```
+docker-compose up -d
+```
+
+## Acces
+
+Pentru ambele sisteme de operare poți verifica statusul containerelor docker folosind:
+
+```
+docker-compose ps
 ```
 
 ### Linux
