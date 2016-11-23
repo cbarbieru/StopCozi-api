@@ -5,7 +5,7 @@ info:
   title: Stop Cozi API
   termsOfService: 'http://stopcozi.ithub.gov.ro/terms/'
   contact:
-    email: 'api@gov.ro'
+    email: 'stopcozi@ithub.gov.ro'
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
@@ -17,7 +17,7 @@ tags:
 schemes:
   - http
 paths:
-  '/agency/{agencyId}':
+  '/agencies/{agencyId}':
     put:
       tags:
         - stare
@@ -28,12 +28,16 @@ paths:
       produces:
         - application/json
       parameters:
+        - name: agencyId
+          in: path
+          required: true
+          type: string
         - name: agency
           in: body
-          description: Starea agentiei
           required: true
           schema:
             $ref: '#/definitions/Agency'
+          description: Starea agentiei
       responses:
         '200':
           description: Agentia a fost actualizata
@@ -41,7 +45,7 @@ paths:
           description: Agentie inexistenta
         '409':
           description: Informatii lipsa
-  '/ticket/{agencyId}/{serviceId}/{ticketNo}':
+  '/agencies/{agencyId}/services/{serviceId}/tickets':
     post:
       tags:
         - activitate
@@ -54,22 +58,27 @@ paths:
       parameters:
         - name: agencyId
           in: path
+          required: true
           type: string
         - name: serviceId
           in: path
-          type: string
-        - name: ticketNo
-          in: path
+          required: true
           type: string
         - name: ticket
           in: body
+          required: true
           schema:
             $ref: '#/definitions/Ticket'
           description: Continutul bonului
       responses:
         '200':
           description: Bonul a fost creat
-    put:
+        '404':
+          description: Agentie inexistenta sau serviciu inexistent
+        '409':
+          description: Informatii lipsa
+  '/agencies/{agencyId}/services/{serviceId}/tickets/{ticketNo}':
+    patch:
       tags:
         - activitate
       summary: Actualizeaza (partial) bonul
@@ -81,74 +90,92 @@ paths:
       parameters:
         - name: agencyId
           in: path
+          required: true
           type: string
         - name: serviceId
           in: path
+          required: true
           type: string
         - name: ticketNo
           in: path
+          required: true
           type: string
         - name: ticket
           in: body
+          required: true
           schema:
             $ref: '#/definitions/Ticket'
           description: Continutul bonului
       responses:
         '200':
           description: Bonul a fost actualizat
+        '404':
+          description: Agentie inexistenta, serviciu inexistent sau bon inexistent
+        '409':
+          description: Schimbarile indicate nu pot fi efectuate (e.g., ticketNo, issueDateTime, serviceId)
 definitions:
   Agency:
     type: object
     required:
-      - agencyId
+      - id
+      - name
+      - description
       - services
       - desks
     properties:
-      agencyId:
+      id:
         type: string
-        description: Id-ul agentiei (ca locatie fizica)
-      agencyName:
+        description: Id-ul agentiei, ca locatie fizica (de exemplu, spcrpciv.bucuresti.pipera)
+      name:
         type: string
-        description: numele scurt al agentiei (SPCRPCIV)
-      location:
-        type: string
-        description: Locatia agentiei
+        description: Numele scurt al agentiei (de exemplu, SPCRPCIV București)
       description:
         type: string
-        description: Numele complet al agentiei
+        description: Numele complet al agentiei (de exemplu, Serviciul Public Comunitar Regim Permise de Conducere și Înmatriculari Vehicule al Municipiului București)
+      address:
+        type: string
+        description: Adresa agentiei, ca locatie fizica (de exemplu, Șoseaua Pipera 49, București 014254))
+      location:
+        $ref: '#/definitions/Location'
+        description: Coordonatele GPS ale agentiei
       categories:
         type: array
         items:
           $ref: '#/definitions/Category'
+        description: Categoriile de servicii oferite de agentie
       services:
         type: array
         items:
           $ref: '#/definitions/Service'
+        description: Serviciilor oferite de agentie si starea lor
       desks:
         type: array
         items:
           $ref: '#/definitions/Desk'
+        description: Ghiseelor agentiei si starea lor
   Category:
     type: object
     required:
-      - categoryId
+      - id
+      - name
     properties:
-      categoryId:
+      id:
         type: string
-      categoryName:
+      name:
         type: string
   Service:
     type: object
     required:
-      - serviceId
+      - id
+      - name
       - workingHours
-      - ticketsInProgress
       - lastIssuedTicket
+      - ticketsInProgress
     properties:
-      serviceId:
+      id:
         type: string
         description: Id-ul serviciului
-      serviceName:
+      name:
         type: string
         description: Numele serviciului
       categoryIds:
@@ -161,46 +188,52 @@ definitions:
         items:
           $ref: '#/definitions/ServiceSchedule'
         description: Programul serviciului
+      ticketLimit:
+        type: string
+        description: Numarul ultimului bon care se poate emite azi
+      lastIssuedTicket:
+        $ref: '#/definitions/Ticket'
+        description: Ultimul bon emis
       ticketsInProgress:
         type: array
         items:
-          type: string
-        description: Numerele bonurilor aflate in lucru
-      lastIssuedTicket:
-        type: string
-        description: Ultimul bon emis
-      ticketLimit:
-        type: integer
-        format: int32
+          $ref: '#/definitions/Ticket'
+        description: Bonurile aflate in lucru
   Desk:
     type: object
     required:
-      - deskId
+      - id
+      - name
+      - ticketsInProgress
     properties:
-      deskId:
+      id:
         type: string
-      deskName:
+      name:
         type: string
+      ticketsInProgress:
+        type: array
+        items:
+          $ref: '#/definitions/Ticket'
+        description: Bonurile aflate in lucru
   Ticket:
     type: object
     required:
       - ticketNo
-      - issueDate
+      - issueDateTime
       - status
       - serviceId
     properties:
       ticketNo:
-        type: integer
-        format: int32
-      issueDate:
-        type: number
-        description: Data emiterii
+        type: string
+      issueDateTime:
+        type: string
         format: 'date-time'
+        description: Data si timpul emiterii
       status:
         $ref: '#/definitions/TicketStatus'
       serviceId:
         type: string
-        description: Serviciul de referinta
+        description: Serviciul pentru care a fost emis bonul
       deskId:
         type: string
         description: Ghiseul catre care a fost directionat bonul
@@ -215,6 +248,8 @@ definitions:
   ServiceSchedule:
     type: object
     properties:
+      dayOfWeek:
+        $ref: '#/definitions/DaysOfWeek'
       start:
         type: string
         format: 'date-time'
@@ -227,4 +262,28 @@ definitions:
         type: array
         items:
           type: string
-        description: Ghiseele arondate
+        description: Id-uri ghisee la care e arondat serviciul
+  DaysOfWeek:
+    type: string
+    enum:
+      - monday
+      - tuesday
+      - wednesday
+      - thursday
+      - friday
+    description: Zilele saptamanii
+  Location:
+    type: object
+    description: Locatia GPS
+    required:
+      - lat
+      - lng
+    properties:
+      lat:
+        type: number
+        format: float
+        description: Latitudine
+      lng:
+        type: number
+        format: float
+        description: Longitudine

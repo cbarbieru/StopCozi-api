@@ -9,14 +9,10 @@ import javax.persistence.Table;
 
 @Data
 @Entity
-@Table(name = "offices")
-public class Office extends Identity {
+@Table(name = "services")
+public class Service extends Identity {
 
   private String name;
-
-  @ManyToOne
-  @JoinColumn(name = "agencyId")
-  private Agency agency;
 
 }
 

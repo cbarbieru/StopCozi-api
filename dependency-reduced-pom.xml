@@ -18,16 +18,17 @@
               <goal>generate</goal>
             </goals>
             <configuration>
-              <inputSpec>${basedir}/src/main/swagger/swagger.yaml</inputSpec>
+              <inputSpec>${basedir}/src/main/swagger/broadcast.yaml</inputSpec>
               <language>jaxrs-spec</language>
               <templateDirectory>${basedir}/src/main/resources/swagger-codegen-custom-templates</templateDirectory>
-              <modelPackage>ro.gov.ithub.stopcozi.model.api</modelPackage>
-              <apiPackage>ro.gov.ithub.stopcozi.resource.api</apiPackage>
+              <modelPackage>ro.gov.ithub.stopcozi.api.broadcast.model</modelPackage>
+              <apiPackage>ro.gov.ithub.stopcozi.api.broadcast.resource</apiPackage>
               <environmentVariables>
                 <models />
                 <apis />
               </environmentVariables>
               <configOptions>
+                <dateLibrary>java8</dateLibrary>
                 <sourceFolder>src/gen/java</sourceFolder>
               </configOptions>
             </configuration>

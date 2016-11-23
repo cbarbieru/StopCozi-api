@@ -1,19 +1,3 @@
-/*
- *  Copyright 2016 SmartBear Software
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
 package ro.gov.ithub.stopcozi;
 
 import com.google.inject.AbstractModule;
@@ -32,7 +16,7 @@ import org.hibernate.SessionFactory;
 import org.slf4j.LoggerFactory;
 import ro.gov.ithub.stopcozi.model.repo.Agency;
 import ro.gov.ithub.stopcozi.model.repo.Desk;
-import ro.gov.ithub.stopcozi.model.repo.Office;
+import ro.gov.ithub.stopcozi.model.repo.Service;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
@@ -42,7 +26,7 @@ public class Server extends Application<ServerConfiguration> {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(Server.class);
 
     private final HibernateBundle<ServerConfiguration> hibernateBundle = new HibernateBundle<ServerConfiguration>(
-        Agency.class, Desk.class, Office.class
+        Agency.class, Desk.class, Service.class
     ) {
         @Override
         public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
