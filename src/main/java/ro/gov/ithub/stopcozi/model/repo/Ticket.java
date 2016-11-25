@@ -3,19 +3,17 @@ package ro.gov.ithub.stopcozi.model.repo;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "tickets")
+@Table(name = "TICKETS")
 public class Ticket extends Identity {
 
     private String ticketNo;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private OffsetDateTime issueDateTime;
+    private Date issueDateTime;
 
     @Enumerated(EnumType.STRING)
     private TicketStatus status;

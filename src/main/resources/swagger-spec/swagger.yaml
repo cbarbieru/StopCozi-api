@@ -117,7 +117,7 @@ definitions:
   Agency:
     type: object
     required:
-      - id
+      - internalId
       - name
       - description
       - services
@@ -156,7 +156,7 @@ definitions:
   Category:
     type: object
     required:
-      - id
+      - internalId
       - name
     properties:
       id:
@@ -166,11 +166,10 @@ definitions:
   Service:
     type: object
     required:
-      - id
+      - internalId
       - name
       - workingHours
       - lastIssuedTicket
-      - ticketsInProgress
     properties:
       id:
         type: string
@@ -178,31 +177,26 @@ definitions:
       name:
         type: string
         description: Numele serviciului
-      categoryIds:
+      categories:
         type: array
         items:
-          type: string
-        description: Categorii asociate serviciului
+          $ref: '#/definitions/Category'
+        description: Categoriile asociate serviciului
       workingHours:
         type: array
         items:
           $ref: '#/definitions/ServiceSchedule'
         description: Programul serviciului
       ticketLimit:
-        type: string
+        type: integer
         description: Numarul ultimului bon care se poate emite azi
       lastIssuedTicket:
-        $ref: '#/definitions/Ticket'
+        type: string
         description: Ultimul bon emis
-      ticketsInProgress:
-        type: array
-        items:
-          $ref: '#/definitions/Ticket'
-        description: Bonurile aflate in lucru
   Desk:
     type: object
     required:
-      - id
+      - internalId
       - name
       - ticketsInProgress
     properties:
@@ -249,7 +243,7 @@ definitions:
     type: object
     properties:
       dayOfWeek:
-        $ref: '#/definitions/DaysOfWeek'
+        $ref: '#/definitions/DayOfWeek'
       start:
         type: string
         format: 'date-time'
@@ -261,9 +255,9 @@ definitions:
       desks:
         type: array
         items:
-          type: string
+          $ref: '#/definitions/Desk'
         description: Id-uri ghisee la care e arondat serviciul
-  DaysOfWeek:
+  DayOfWeek:
     type: string
     enum:
       - monday

@@ -13,5 +13,5 @@ abstract class Identity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter
-    Long id;
+    Long internalId;
 }

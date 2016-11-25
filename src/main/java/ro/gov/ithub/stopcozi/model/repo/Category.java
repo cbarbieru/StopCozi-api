@@ -1,19 +1,17 @@
 package ro.gov.ithub.stopcozi.model.repo;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.util.Objects;
 
 @Data
 @Entity
-@Table(name = "categories")
-public class Category {
+@Table(name = "CATEGORIES")
+public class Category extends Identity{
 
-  private String id = null;
+  private String id;
 
-  private String name = null;
+  private String name;
 
 }

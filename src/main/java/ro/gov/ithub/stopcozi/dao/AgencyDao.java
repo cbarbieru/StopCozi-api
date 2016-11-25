@@ -6,8 +6,6 @@ import ro.gov.ithub.stopcozi.model.repo.Agency;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.Collections;
-import java.util.List;
 
 @Singleton
 public class AgencyDao extends AbstractDAO<Agency> {
@@ -16,13 +14,9 @@ public class AgencyDao extends AbstractDAO<Agency> {
         super(sessionFactory);
     }
 
-    public List<Agency> listByCounty(String countryCode){
-        //return list(criteria().add(Restrictions.eq("countyCode", countryCode)));
-        Agency agency = new Agency();
-        agency.setName("ADR");
-        agency.setCountyCode("IS");
-        agency.setId(100001L);
+    public Long save(Agency agency){
+        Agency persistedAgency = persist(agency);
 
-        return Collections.singletonList(agency);
+        return persistedAgency.getInternalId();
     }
 }

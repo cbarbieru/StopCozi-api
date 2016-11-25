@@ -2,20 +2,19 @@ package ro.gov.ithub.stopcozi.model.repo;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
-@Table(name = "desks")
+@Table(name = "DESKS")
 public class Desk extends Identity {
+
+    private String id;
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "serviceId")
-    private Service service;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "desk")
+    private List<Ticket> ticketsInProgress;
 
 }

@@ -2,17 +2,29 @@ package ro.gov.ithub.stopcozi.model.repo;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
-@Table(name = "services")
+@Table(name = "SERVICES")
 public class Service extends Identity {
 
+  private String id;
+
   private String name;
+
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JoinColumn(name = "serviceId")
+  private List<Category> categories;
+
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JoinColumn(name = "serviceId")
+  private List<ServiceSchedule> workingHours;
+
+  private Integer ticketLimit;
+
+  private String lastIssuedTicket;
 
 }
 

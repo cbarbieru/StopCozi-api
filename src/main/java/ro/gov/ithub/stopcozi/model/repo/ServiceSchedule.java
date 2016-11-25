@@ -1,25 +1,27 @@
 package ro.gov.ithub.stopcozi.model.repo;
 
 import lombok.Data;
-import ro.gov.ithub.stopcozi.api.broadcast.model.DaysOfWeek;
 
 import javax.persistence.*;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
 @Entity
-@Table(name = "services")
-public class ServiceSchedule {
+@Table(name = "SERVICE_SCHEDULES")
+public class ServiceSchedule extends Identity{
 
     @Enumerated(EnumType.STRING)
-    private DaysOfWeek dayOfWeek;
+    private DayOfWeek dayOfWeek;
 
     @Temporal(TemporalType.TIME)
-    private OffsetDateTime start;
+    private Date start;
 
     @Temporal(TemporalType.TIME)
-    private OffsetDateTime end;
+    private Date end;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "serviceId")
+    private List<Desk> desks;
 
 }
