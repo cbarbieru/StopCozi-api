@@ -117,7 +117,7 @@ definitions:
   Agency:
     type: object
     required:
-      - internalId
+      - id
       - name
       - description
       - services
@@ -156,7 +156,7 @@ definitions:
   Category:
     type: object
     required:
-      - internalId
+      - id
       - name
     properties:
       id:
@@ -166,7 +166,7 @@ definitions:
   Service:
     type: object
     required:
-      - internalId
+      - id
       - name
       - workingHours
       - lastIssuedTicket
@@ -177,10 +177,10 @@ definitions:
       name:
         type: string
         description: Numele serviciului
-      categories:
+      categoryIds:
         type: array
         items:
-          $ref: '#/definitions/Category'
+          type: string
         description: Categoriile asociate serviciului
       workingHours:
         type: array
@@ -188,7 +188,7 @@ definitions:
           $ref: '#/definitions/ServiceSchedule'
         description: Programul serviciului
       ticketLimit:
-        type: integer
+        type: string
         description: Numarul ultimului bon care se poate emite azi
       lastIssuedTicket:
         type: string
@@ -196,7 +196,7 @@ definitions:
   Desk:
     type: object
     required:
-      - internalId
+      - id
       - name
       - ticketsInProgress
     properties:
@@ -265,6 +265,8 @@ definitions:
       - wednesday
       - thursday
       - friday
+      - saturday
+      - sunday
     description: Zilele saptamanii
   Location:
     type: object

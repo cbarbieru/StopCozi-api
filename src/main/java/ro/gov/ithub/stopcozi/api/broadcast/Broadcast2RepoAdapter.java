@@ -32,7 +32,7 @@ public class Broadcast2RepoAdapter {
         Service repoService = new Service();
         repoService.setId(service.getId());
         repoService.setName(service.getName());
-        repoService.setCategories(service.getCategories().stream().map(Broadcast2RepoAdapter::adaptCategory).collect(Collectors.toList()));
+        // TODO: category references need to be set based on their ids
         repoService.setWorkingHours(service.getWorkingHours().stream().map(Broadcast2RepoAdapter::adaptServiceSchedule).collect(Collectors.toList()));
         repoService.setTicketLimit(service.getTicketLimit());
         repoService.setLastIssuedTicket(service.getLastIssuedTicket());
@@ -68,7 +68,7 @@ public class Broadcast2RepoAdapter {
         repoTicket.setTicketNo(ticket.getTicketNo());
         repoTicket.setIssueDateTime(new Date(ticket.getIssueDateTime().toEpochSecond()));
         repoTicket.setStatus(adaptTicketStatus(ticket.getStatus()));
-        // ser
+        // TODO: service and desk references need to be set based on their ids
 
         return repoTicket;
     }

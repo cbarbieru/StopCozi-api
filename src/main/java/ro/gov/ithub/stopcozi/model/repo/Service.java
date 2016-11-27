@@ -22,7 +22,7 @@ public class Service extends Identity {
   @JoinColumn(name = "serviceId")
   private List<ServiceSchedule> workingHours;
 
-  private Integer ticketLimit;
+  private String ticketLimit;
 
   private String lastIssuedTicket;
 
