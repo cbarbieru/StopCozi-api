@@ -1,26 +1,63 @@
-Build with
+# StopCozi API
+
+## Instalare
+
+Rulați următoarele comenzi:
 
 ```
-mvn clean install 
+sudo mkdir -p /opt/mysql/data
+cp .env.sample .env
 ```
 
-Run with 
+Editați fișierul `.env` și completați-l cu detaliile necesare.
+
+## Execuție
+
+### Linux
 
 ```
-java -jar ./target/StopCozi-api-1.0.0-SNAPSHOT.jar server server.yml
+docker-compose up -d
 ```
 
+### Windows
 
-You can get to the swagger file at:
+Dacă folosești Babun și ConEmu, rulează mai întâi:
 
 ```
-http://localhost:8080/api-spec/swagger.yaml
+docker-machine start
+eval $(docker-machine env default)
 ```
 
-IDE instructions
+Altfel, rulează `Docker Quickstart Terminal` și execută:
 
-Make sure you've added Lombok support (https://projectlombok.org/download.html). 
-Also, source generation should be done directly from maven, as IDEs don't handle this well enough. Once generation is done, the '/target/generated-sources/swagger/src/gen/java' needs to be indicated as source folder in the IDE.
+```
+docker-compose up -d
+```
 
-Have fun!
+## Acces
 
+Pentru ambele sisteme de operare poți verifica statusul containerelor docker folosind:
+
+```
+docker-compose ps
+```
+
+### Linux
+
+Acum puteți accesa:
+* API-ul swagger [aici](http://localhost:8080/swagger.json).
+* Interfața admin [aici](http://localhost:8081).
+* Baza de date poate fi accesată la `localhost:3307`.
+
+### Windows
+Acum puteți accesa:
+* API-ul swagger [aici](http://192.168.99.100:8081/swagger.json).
+* Interfața admin [aici](http://192.168.99.100:8081).
+* Baza de date poate fi accesată la `192.168.99.100:3307`.
+
+## IDE
+
+Un pas este ca trebuie instalat supoertul Lombok (https://projectlombok.org/download.html). 
+Alt pas este ca sursele generate ar trebui optinute extern IDE-ului ruland direct maven e.g. 'mvn compile'. In plus IDE-ul trebuie sa recunoasca locatia unde are loc generarea drept 'surse'.
+
+Baftă!
