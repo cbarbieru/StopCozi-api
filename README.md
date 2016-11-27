@@ -1,21 +1,58 @@
-Build with
+# StopCozi API
+
+## Instalare
+
+Rulați următoarele comenzi:
 
 ```
-mvn clean install 
+sudo mkdir -p /opt/mysql/data
+cp .env.sample .env
 ```
 
-Run with 
+Editați fișierul `.env` și completați-l cu detaliile necesare.
+
+## Execuție
+
+### Linux
 
 ```
-java -jar ./target/StopCozi-api-1.0.0-SNAPSHOT.jar server server.yml
+docker-compose up -d
 ```
 
+### Windows
 
-You can get to the swagger file at:
+Dacă folosești Babun și ConEmu, rulează mai întâi:
 
 ```
-http://localhost:8080/swagger.json
+docker-machine start
+eval $(docker-machine env default)
 ```
 
-Have fun!
+Altfel, rulează `Docker Quickstart Terminal` și execută:
 
+```
+docker-compose up -d
+```
+
+## Acces
+
+Pentru ambele sisteme de operare poți verifica statusul containerelor docker folosind:
+
+```
+docker-compose ps
+```
+
+### Linux
+
+Acum puteți accesa:
+* API-ul swagger [aici](http://localhost:8080/swagger.json).
+* Interfața admin [aici](http://localhost:8081).
+* Baza de date poate fi accesată la `localhost:3307`.
+
+### Windows
+Acum puteți accesa:
+* API-ul swagger [aici](http://192.168.99.100:8081/swagger.json).
+* Interfața admin [aici](http://192.168.99.100:8081).
+* Baza de date poate fi accesată la `192.168.99.100:3307`.
+
+Baftă!
